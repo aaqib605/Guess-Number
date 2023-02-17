@@ -12,39 +12,40 @@ const bodyEl = document.querySelector("body");
 let score = 20;
 let highScore = 0;
 
+const handleIncorrectGuess = function (str) {
+  if (score > 1) {
+    messageEl.textContent = `${str}`;
+    score--;
+    scoreEl.textContent = score;
+  } else {
+    messageEl.textContent = "🎭 You lost the game!";
+    scoreEl.textContent = 0;
+  }
+};
+
+const handleCorrectGuess = function () {
+  secretNumberEl.textContent = secretNumber;
+  secretNumberEl.style.width = "30rem";
+  bodyEl.style.backgroundColor = "#60b347";
+  if (score > highScore) {
+    highScore = score;
+    highScoreEl.textContent = highScore;
+  }
+  score = 20;
+  messageEl.textContent = "🎉 Correct!";
+};
+
 checkButtonEl.addEventListener("click", function () {
   const inputElementValue = Number(inputEl.value);
 
   if (!inputElementValue) {
     messageEl.textContent = "⚠️ No number entered!";
   } else if (inputElementValue > secretNumber) {
-    if (score > 1) {
-      messageEl.textContent = "Too high!";
-      score--;
-      scoreEl.textContent = score;
-    } else {
-      messageEl.textContent = "🎭 You lost the game!";
-      scoreEl.textContent = 0;
-    }
+    handleIncorrectGuess("📈 Too high!");
   } else if (inputElementValue < secretNumber) {
-    if (score > 1) {
-      messageEl.textContent = "Too Low!";
-      score--;
-      scoreEl.textContent = score;
-    } else {
-      messageEl.textContent = "🎭 You lost the game!";
-      scoreEl.textContent = 0;
-    }
+    handleIncorrectGuess("📉 Too Low!");
   } else if (inputElementValue === secretNumber) {
-    secretNumberEl.textContent = secretNumber;
-    secretNumberEl.style.width = "30rem";
-    bodyEl.style.backgroundColor = "#60b347";
-    if (score > highScore) {
-      highScore = score;
-      highScoreEl.textContent = highScore;
-    }
-    score = 20;
-    messageEl.textContent = "🎉 Correct!";
+    handleCorrectGuess();
   }
 });
 
